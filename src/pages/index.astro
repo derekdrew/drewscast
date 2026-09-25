@@ -1,0 +1,465 @@
+---
+const title = "Drewscast";
+const description =
+  "What’s happening. Why it matters. What everyone else is missing.";
+
+const RSS_URL = "https://anchor.fm/s/fb3d6a98/podcast/rss";
+
+const response = await fetch(RSS_URL);
+const xml = await response.text();
+
+const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
+
+function getValue(item, tag) {
+  const match = item.match(
+    new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`)
+  );
+
+  if (!match) return "";
+
+  return match[1]
+    .trim()
+    .replace(/^<!\[CDATA\[/, "")
+    .replace(/\]\]>$/, "")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getTeaser(text) {
+  const sentences = text.match(/[^.!?]+[.!?]+/g) ?? [];
+
+  return (
+    sentences.slice(0, 2).join(" ").trim() ||
+    text.slice(0, 240).trim() + "..."
+  );
+}
+
+const latestEpisode = items.length
+  ? {
+      title: getValue(items[0][1], "title"),
+      description: getTeaser(
+        getValue(items[0][1], "description")
+      ),
+      pubDate: getValue(items[0][1], "pubDate"),
+      link: `https://open.spotify.com/episode/${getValue(items[0][1], "guid")}`,
+      guid: getValue(items[0][1], "guid")
+    }
+  : null;
+
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>{title}</title>
+
+    <meta name="description" content={description} />
+
+    <style>
+      :root {
+        --background: #f5f3ee;
+        --text: #111111;
+        --muted: #666666;
+        --line: #d8d5ce;
+        --accent: #d7ff38;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--background);
+        color: var(--text);
+        font-family:
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1120px, calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      header {
+        border-bottom: 1px solid var(--line);
+      }
+
+      nav {
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        font-size: 1.15rem;
+        font-weight: 900;
+        letter-spacing: -0.06em;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 28px;
+        font-size: 0.95rem;
+      }
+
+      .hero {
+        padding: 110px 0 90px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .eyebrow {
+        margin-bottom: 20px;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 950px;
+        margin: 0;
+        font-size: clamp(4rem, 10vw, 5rem);
+        line-height: 0.98;
+        letter-spacing: -0.075em;
+      }
+
+      .hero-copy {
+        max-width: 680px;
+        margin-top: 35px;
+        color: #444;
+        font-size: clamp(1.15rem, 2vw, 1.4rem);
+        line-height: 1.45;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 13px 20px;
+        border: 1px solid var(--text);
+        border-radius: 999px;
+        background: var(--text);
+        color: white;
+        font-weight: 750;
+      }
+
+      .button.secondary {
+        background: transparent;
+        color: var(--text);
+      }
+
+      section {
+        padding: 75px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .section-heading {
+        margin-bottom: 28px;
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        line-height: 1;
+        letter-spacing: -0.06em;
+      }
+
+      .latest {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 24px;
+      }
+
+      .card {
+        padding: 34px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: white;
+      }
+
+      .date {
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .episode-title {
+        margin: 15px 0;
+        font-size: clamp(2.3rem, 5vw, 4.2rem);
+        line-height: 0.95;
+        letter-spacing: -0.06em;
+      }
+
+      .description {
+        max-width: 600px;
+        color: #555;
+        font-size: 1.05rem;
+        line-height: 1.5;
+      }
+
+      .player {
+        min-height: 320px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: #e9e6df;
+        text-align: center;
+        color: var(--muted);
+      }
+
+      .player strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text);
+      }
+
+      .topics {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+
+      .topic {
+        min-height: 160px;
+        padding: 24px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: white;
+      }
+
+      .topic h3 {
+        margin: 0 0 12px;
+        font-size: 1.25rem;
+      }
+
+      .topic p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      footer {
+        padding: 45px 0;
+      }
+
+      footer p {
+        color: var(--muted);
+      }
+
+      @media (max-width: 800px) {
+        .hero {
+          padding: 75px 0 65px;
+        }
+
+        .latest,
+        .topics {
+          grid-template-columns: 1fr;
+        }
+
+        .player {
+          min-height: 220px;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .container {
+          width: calc(100% - 28px);
+        }
+
+        nav {
+          height: 62px;
+        }
+
+        .nav-links {
+          gap: 16px;
+        }
+
+        .card {
+          padding: 26px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="container">
+        <nav>
+          <a href="/" class="logo">DREWSCАST</a>
+
+          <div class="nav-links">
+            <a href="#latest">Latest</a>
+            <a href="#about">About</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="eyebrow">A daily briefing from Derek Drew</div>
+
+          <h1>
+            What’s happening. Why it matters. What everyone else is missing.
+          </h1>
+
+          <p class="hero-copy">
+            Drewscast is the daily shortcut for people who want to understand
+            the stories moving markets, business, AI, tech, and the world
+            without spending two hours on X.
+          </p>
+
+          <div class="buttons">
+            <a class="button" href="#latest">Listen to the latest</a>
+            <a class="button secondary" href="#about">About Drewscast</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="latest">
+        <div class="container">
+          <h2 class="section-heading">Latest episode</h2>
+
+          <div class="latest">
+            <article class="card">
+              {latestEpisode && (
+                <>
+                    <div class="date">
+                      {new Date(latestEpisode.pubDate).toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                      })}
+                    </div>
+
+                    <h2 class="episode-title">
+                      {latestEpisode.title}
+                    </h2>
+
+                    <p class="description">
+                      {latestEpisode.description}...
+                    </p>
+                  </>
+              )}
+
+              <div class="buttons">
+
+                <a
+                  href="https://open.spotify.com/show/67py7BCCUDAomXOPEh9pXO"
+                  class="button"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Listen on Spotify
+                </a>
+
+                <a
+                  class="button secondary"
+                  href="https://www.youtube.com/@drewscast"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Watch on YouTube
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <h2 class="section-heading">What Drewscast covers</h2>
+
+          <div class="topics">
+            <article class="topic">
+              <h3>Markets</h3>
+              <p>
+                Stocks, rates, commodities, sentiment, and the signals beneath
+                the headlines.
+              </p>
+            </article>
+
+            <article class="topic">
+              <h3>Business</h3>
+              <p>
+                Companies, deals, money, and decisions changing the landscape.
+              </p>
+            </article>
+
+            <article class="topic">
+              <h3>AI & Tech</h3>
+              <p>
+                The developments that matter beyond the hype cycle.
+              </p>
+            </article>
+
+            <article class="topic">
+              <h3>The world</h3>
+              <p>
+                The weird, important, and surprisingly relevant stories worth
+                knowing.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="about">
+        <div class="container">
+          <h2 class="section-heading">The idea</h2>
+
+          <p class="hero-copy">
+            You shouldn't need to spend your morning scrolling through
+            hundreds of posts to understand what's going on.
+          </p>
+
+          <p class="hero-copy">
+            Drewscast follows the stories worth knowing, explains why they
+            matter, and looks for what everyone else is missing.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="logo">DREWSCАST</div>
+        <p>
+          What’s happening. Why it matters. What everyone else is missing.
+        </p>
+        <p>© 2026 Drewscast</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
