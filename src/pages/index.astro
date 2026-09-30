@@ -307,7 +307,59 @@ const latestEpisode = items.length
         .card {
           padding: 26px;
         }
-      }
+
+        .newsletter {
+          background: var(--text);
+          color: white;
+        }
+
+        .newsletter-inner {
+          display: grid;
+          grid-template-columns: 1.4fr 0.6fr;
+          gap: 40px;
+          align-items: center;
+        }
+
+        .newsletter .section-heading {
+          color: white;
+          margin-bottom: 20px;
+        }
+
+        .eyebrow {
+          margin-bottom: 18px;
+          font-size: 0.8rem;
+          font-weight: 800;
+          letter-spacing: 0.12em;
+        }
+
+        .newsletter-copy {
+          max-width: 650px;
+          color: #c8c8c8;
+          font-size: 1.1rem;
+          line-height: 1.6;
+        }
+
+        .newsletter-action {
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        .newsletter .button {
+          background: var(--accent);
+          border-color: var(--accent);
+          color: var(--text);
+        }
+
+        @media (max-width: 700px) {
+          .newsletter-inner {
+            grid-template-columns: 1fr;
+          }
+
+          .newsletter-action {
+            justify-content: flex-start;
+          }
+        }
+
     </style>
   </head>
 
@@ -394,6 +446,32 @@ const latestEpisode = items.length
                 </a>
               </div>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="newsletter">
+        <div class="container newsletter-inner">
+          <div>
+            <p class="eyebrow">DREWSLETTER</p>
+            <h2 class="section-heading">
+              The stories worth knowing, delivered to your inbox.
+            </h2>
+            <p class="newsletter-copy">
+              A short written companion to the Drewscast covering markets, business,
+              AI, tech, and the things Derek thinks are worth paying attention to.
+            </p>
+          </div>
+
+          <div class="newsletter-action">
+            <a
+              class="button"
+              href="https://thedrewsletter.substack.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Subscribe to the Drewsletter
+            </a>
           </div>
         </div>
       </section>
