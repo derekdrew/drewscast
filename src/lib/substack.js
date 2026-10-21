@@ -29,6 +29,15 @@ function cleanDescription(value = "") {
     .trim();
 }
 
+// Substack's main RSS feed combines written posts and podcast episodes.
+// Exclude entries with audio enclosures or podcast duration metadata.
+function isPodcastPost(item) {
+  const hasAudioEnclosure = /<(?:[\w.-]+:)?enclosure\b[^>]*\btype=["']audio\//i.test(item);
+  const hasAudioFileEnclosure = /<(?:[\w.-]+:)?enclosure\b[^>]*\burl=["'][^"']+\.(?:mp3|m4a|aac|wav|ogg)(?:\?[^"']*)?["']/i.test(item);
+  const hasPodcastDuration = /<(?:itunes:)?duration\b/i.test(item);
+  return hasAudioEnclosure || hasAudioFileEnclosure || hasPodcastDuration;
+}
+
 export async function getNewsletterPosts() {
   const response = await fetch(FEED_URL, {
     headers: { accept: "application/rss+xml, application/xml, text/xml" },
@@ -36,10 +45,13 @@ export async function getNewsletterPosts() {
   if (!response.ok) throw new Error("Drewsletter feed returned " + response.status);
   const xml = await response.text();
   const items = [...xml.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)];
-  return items.map(({ 1: item }) => ({
-    title: tagValue(item, "title"),
-    link: tagValue(item, "link"),
-    pubDate: tagValue(item, "pubDate"),
-    description: cleanDescription(tagValue(item, "description") || tagValue(item, "encoded")),
-  })).filter((post) => post.title && post.link);
+  return items
+    .filter(({ 1: item }) => !isPodcastPost(item))
+    .map(({ 1: item }) => ({
+      title: tagValue(item, "title"),
+      link: tagValue(item, "link"),
+      pubDate: tagValue(item, "pubDate"),
+      description: cleanDescription(tagValue(item, "description") || tagValue(item, "encoded")),
+    }))
+    .filter((post) => post.title && post.link);
 }
