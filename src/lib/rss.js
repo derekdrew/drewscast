@@ -15,15 +15,14 @@ function decodeEntities(value = "") {
 }
 
 function getTag(item, tag) {
-  const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const match = item.match(
-    new RegExp(`<(?:[\\w.-]+:)?${escapedTag}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/(?:[\\w.-]+:)?${escapedTag}\\s*>`, "i")
-  );
+  const pattern = "<(?:[\\\\w.-]+:)?" + tag + "(?:\\\\s[^>]*)?>([\\\\s\\\\S]*?)<\\\\/(?:[\\\\w.-]+:)?" + tag + "\\\\s*>";
+  const match = item.match(new RegExp(pattern, "i"));
   return match ? decodeEntities(match[1].trim()) : "";
 }
 
 function getAttribute(item, tag, attribute) {
-  const match = item.match(new RegExp(`<(?:[\\w.-]+:)?${tag}\\b[^>]*\\b${attribute}=["']([^"']+)["'][^>]*\\/?\\s*>`, "i"));
+  const pattern = "<(?:[\\\\w.-]+:)?" + tag + "\\\\b[^>]*\\\\b" + attribute + "=[\\"']([^\\"']+)[\\"'][^>]*\\\\/?\\\\s*>";
+  const match = item.match(new RegExp(pattern, "i"));
   return match ? decodeEntities(match[1].trim()) : "";
 }
 
@@ -32,14 +31,14 @@ function stripHtml(value = "") {
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]*>/g, " ")
-    .replace(/\\s+/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
 export function episodeSlug(episode) {
   const titleSlug = (episode.title || "episode")
     .normalize("NFKD")
-    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
@@ -53,11 +52,11 @@ export async function getEpisodes() {
   });
 
   if (!response.ok) {
-    throw new Error(`RSS feed returned ${response.status}`);
+    throw new Error(\`RSS feed returned \${response.status}\`);
   }
 
   const xml = await response.text();
-  const items = [...xml.matchAll(/<item\\b[^>]*>([\\s\\S]*?)<\\/item>/gi)];
+  const items = [...xml.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)];
 
   return items.map((match) => {
     const item = match[1];
