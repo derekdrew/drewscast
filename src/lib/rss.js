@@ -15,7 +15,7 @@ function decodeEntities(value = "") {
 }
 
 function getTag(item, tag) {
-  const pattern = "<" + tag + "[^>]*>([\\s\\S]*?)</" + tag + "\\s*>";
+  const pattern = "<(?:[\\\\w.-]+:)?" + tag + "[^>]*>([\\\\s\\S]*?)</(?:[\\\\w.-]+:)?" + tag + "\\s*>";
   const match = item.match(new RegExp(pattern, "i"));
   return match ? decodeEntities(match[1].trim()) : "";
 }
