@@ -1,9 +1,9 @@
 ---
 export const prerender = false;
 
-const title = "Drewscast";
+const title = "Drewscast | Markets, Business, AI & Tech";
 const description =
-  "What’s happening. Why it matters. What everyone else is missing.";
+  "A daily briefing from Derek Drew on the stories moving markets, business, AI, tech, and the world. What’s happening, why it matters, and what everyone else is missing.";
 
 const RSS_URL = "https://anchor.fm/s/fb3d6a98/podcast/rss";
 
@@ -66,6 +66,14 @@ const latestEpisode = items.length
     <title>{title}</title>
 
     <meta name="description" content={description} />
+    <link rel="canonical" href="https://drewscast.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Drewscast" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://drewscast.com/" />
+    <meta name="twitter:card" content="summary" />
+    <script type="application/ld+json" set:html={JSON.stringify({ "@context": "https://schema.org", "@type": "PodcastSeries", name: "Drewscast", description, url: "https://drewscast.com/", webFeed: "https://anchor.fm/s/fb3d6a98/podcast/rss", author: { "@type": "Person", name: "Derek Drew" } }).replace(/</g, "\\u003c")} />
 
     <style>
       :root {
@@ -370,7 +378,8 @@ const latestEpisode = items.length
           <a href="/" class="logo">DREWSCАST</a>
 
           <div class="nav-links">
-            <a href="#latest">Latest</a>
+            <a href="/episodes">Episodes</a>
+            <a href="/drewsletter">Drewsletter</a>
             <a href="#about">About</a>
           </div>
         </nav>
@@ -447,6 +456,7 @@ const latestEpisode = items.length
               </div>
             </article>
           </div>
+          <p class="description" style="margin-top: 24px;">Looking for something specific? <a href="/episodes" style="font-weight: 800; text-decoration: underline;">Browse all episodes →</a></p>
         </div>
       </section>
 
