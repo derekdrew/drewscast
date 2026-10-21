@@ -15,13 +15,13 @@ function decodeEntities(value = "") {
 }
 
 function getTag(item, tag) {
-  const pattern = "<(?:[\w.-]+:)?" + tag + "[^>]*>([\s\S]*?)</(?:[\w.-]+:)?" + tag + "\s*>";
+  const pattern = "<(?:[\\w.-]+:)?" + tag + "[^>]*>([\\s\\S]*?)</(?:[\\w.-]+:)?" + tag + "\\s*>";
   const match = item.match(new RegExp(pattern, "i"));
   return match ? decodeEntities(match[1].trim()) : "";
 }
 
 function getAttribute(item, tag, attribute) {
-  const pattern = "<(?:[\w.-]+:)?" + tag + "\\b[^>]*\\b" + attribute + "=[\"']([^\"']+)[\"'][^>]*>";
+  const pattern = "<(?:[\\w.-]+:)?" + tag + "\\b[^>]*\\b" + attribute + "=[\"']([^\"']+)[\"'][^>]*>";
   const match = item.match(new RegExp(pattern, "i"));
   return match ? decodeEntities(match[1].trim()) : "";
 }
