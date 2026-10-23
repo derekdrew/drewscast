@@ -9,7 +9,13 @@ function escapeXml(value) {
 }
 
 export async function GET() {
-  const episodes = await getEpisodes();
+  // Keep the core site discoverable even if the upstream podcast feed is down.
+  let episodes = [];
+  try {
+    episodes = await getEpisodes();
+  } catch {
+    episodes = [];
+  }
   const urls = [
     { loc: SITE_URL + "/", changefreq: "weekly", priority: "1.0" },
     { loc: SITE_URL + "/episodes", changefreq: "daily", priority: "0.9" },
