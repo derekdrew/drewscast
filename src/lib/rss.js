@@ -1,3 +1,5 @@
+import { fetchFeedText } from "./feed-cache.js";
+
 const RSS_URL = "https://anchor.fm/s/fb3d6a98/podcast/rss";
 
 function decodeEntities(value = "") {
@@ -47,15 +49,7 @@ export function episodeSlug(episode) {
 }
 
 export async function getEpisodes() {
-  const response = await fetch(RSS_URL, {
-    headers: { accept: "application/rss+xml, application/xml, text/xml" },
-  });
-
-  if (!response.ok) {
-    throw new Error("RSS feed returned " + response.status);
-  }
-
-  const xml = await response.text();
+  const xml = await fetchFeedText(RSS_URL, "podcast");
   const items = [...xml.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)];
 
   return items.map((match) => {
