@@ -1,3 +1,5 @@
+import { fetchFeedText } from "./feed-cache.js";
+
 const FEED_URL = "https://thedrewsletter.substack.com/feed";
 
 function decodeEntities(value = "") {
@@ -39,11 +41,7 @@ function isPodcastPost(item) {
 }
 
 export async function getNewsletterPosts() {
-  const response = await fetch(FEED_URL, {
-    headers: { accept: "application/rss+xml, application/xml, text/xml" },
-  });
-  if (!response.ok) throw new Error("Drewsletter feed returned " + response.status);
-  const xml = await response.text();
+  const xml = await fetchFeedText(FEED_URL, "substack");
   const items = [...xml.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)];
   return items
     .filter(({ 1: item }) => !isPodcastPost(item))
