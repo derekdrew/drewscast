@@ -2,7 +2,7 @@ export const prerender = false;
 
 import { getEpisodes } from "../lib/rss.js";
 
-const SITE_URL = "https://drewscast.com";
+const SITE_URL = "https://www.drewscast.com";
 
 function escapeXml(value) {
   return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
