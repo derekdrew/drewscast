@@ -4,47 +4,47 @@ const FEED_URL = "https://thedrewsletter.substack.com/feed";
 
 function decodeEntities(value = "") {
   return value
-    .replace(/^<!\\[CDATA\\[/, "")
-    .replace(/\\]\\]>$/, "")
+    .replace(/^<!\[CDATA\[/, "")
+    .replace(/\]\]>$/, "")
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .replace(/&apos;/g, "'")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
-    .replace(/&#(\\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
-    .replace(/&#x([\\da-f]+);/gi, (_, code) => String.fromCodePoint(parseInt(code, 16)));
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([\da-f]+);/gi, (_, code) => String.fromCodePoint(parseInt(code, 16)));
 }
 
 function tagValue(item, tag) {
-  const pattern = "<(?:[\\\\w.-]+:)?" + tag + "(?:\\\\s[^>]*)?>([\\\\s\\\\S]*?)</(?:[\\\\w.-]+:)?" + tag + "\\\\s*>";
+  const pattern = "<(?:[\\w.-]+:)?" + tag + "(?:\\s[^>]*)?>([\\s\\S]*?)</(?:[\\w.-]+:)?" + tag + "\\s*>";
   const match = item.match(new RegExp(pattern, "i"));
   return match ? decodeEntities(match[1].trim()) : "";
 }
 
 function tagAttribute(item, tag, attribute) {
-  const pattern = "<(?:[\\\\w.-]+:)?" + tag + "\\\\b[^>]*\\\\b" + attribute + "=[\\\"']([^\\\"']+)[\\\"'][^>]*>";
+  const pattern = "<(?:[\\w.-]+:)?" + tag + "\\b[^>]*\\b" + attribute + "=[\"']([^\"']+)[\"'][^>]*>";
   const match = item.match(new RegExp(pattern, "i"));
   return match ? decodeEntities(match[1].trim()) : "";
 }
 
 function cleanDescription(value = "") {
   return decodeEntities(value)
-    .replace(/<script[\\s\\S]*?<\\/script>/gi, " ")
-    .replace(/<style[\\s\\S]*?<\\/style>/gi, " ")
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]*>/g, " ")
-    .replace(/\\s+/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
 function isPodcastPost(item) {
-  const hasAudioEnclosure = /<(?:[\\w.-]+:)?enclosure\\b[^>]*\\btype=["']audio\\//i.test(item);
-  const hasAudioFileEnclosure = /<(?:[\\w.-]+:)?enclosure\\b[^>]*\\burl=["'][^"']+\\.(?:mp3|m4a|aac|wav|ogg)(?:\\?[^"']*)?["']/i.test(item);
-  const hasPodcastDuration = /<(?:itunes:)?duration\\b/i.test(item);
+  const hasAudioEnclosure = /<(?:[\w.-]+:)?enclosure\b[^>]*\btype=["']audio\//i.test(item);
+  const hasAudioFileEnclosure = /<(?:[\w.-]+:)?enclosure\b[^>]*\burl=["'][^"']+\.(?:mp3|m4a|aac|wav|ogg)(?:\?[^"']*)?["']/i.test(item);
+  const hasPodcastDuration = /<(?:itunes:)?duration\b/i.test(item);
   return hasAudioEnclosure || hasAudioFileEnclosure || hasPodcastDuration;
 }
 
-function parseEntry(item, isAtom = false) {
+function parseEntry(item) {
   const title = tagValue(item, "title");
   const link = tagValue(item, "link") || tagAttribute(item, "link", "href");
   const description = tagValue(item, "description") || tagValue(item, "encoded") || tagValue(item, "summary") || tagValue(item, "content");
@@ -62,8 +62,8 @@ export async function getNewsletterPosts() {
   // Support RSS (<item>) and Atom (<entry>) feeds, including Atom links stored
   // as href attributes. Substack normally serves RSS, but this avoids an empty
   // archive if its feed format changes.
-  const rssItems = [...xml.matchAll(/<item\\b[^>]*>([\\s\\S]*?)<\\/item>/gi)].map((match) => parseEntry(match[1]));
-  const atomItems = [...xml.matchAll(/<entry\\b[^>]*>([\\s\\S]*?)<\\/entry>/gi)].map((match) => parseEntry(match[1], true));
+  const rssItems = [...xml.matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)].map((match) => parseEntry(match[1]));
+  const atomItems = [...xml.matchAll(/<entry\b[^>]*>([\s\S]*?)<\/entry>/gi)].map((match) => parseEntry(match[1]));
   const items = rssItems.length ? rssItems : atomItems;
   const validPosts = items.filter((post) => post.title && post.link);
   const writtenPosts = validPosts.filter((post) => !post.isPodcast);
