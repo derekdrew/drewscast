@@ -25,6 +25,12 @@ export async function fetchFeedText(url, cacheName, freshSeconds = 3600) {
     if (!response.ok) throw new Error(`Feed returned ${response.status}`);
     const text = await response.text();
     if (!text.trim()) throw new Error("Feed returned an empty response");
+    // Do not overwrite a usable cached feed with an HTML error page or an
+    // unexpectedly empty feed. Throwing here allows the stale copy below to
+    // be returned instead.
+    if (!/<(?:item|entry)\b/i.test(text)) {
+      throw new Error("Feed response contained no entries");
+    }
 
     if (cache) {
       const freshResponse = new Response(text, {
