@@ -1,12 +1,13 @@
 ---
 export const prerender = false;
 
+import { env } from "cloudflare:workers";
 import { getNewsletterPosts } from "../lib/substack.js";
 
 let posts = [];
 let feedAvailable = true;
 try {
-  posts = await getNewsletterPosts(Astro.locals.runtime?.env);
+  posts = await getNewsletterPosts(env);
 } catch {
   feedAvailable = false;
 }
