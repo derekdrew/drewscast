@@ -57,8 +57,8 @@ function parseEntry(item) {
   };
 }
 
-export async function getNewsletterPosts() {
-  const xml = await fetchFeedText(FEED_URL, "substack");
+export async function getNewsletterPosts(env) {
+  const xml = await fetchFeedText(FEED_URL, "substack", 3600, env);
   // Support RSS (<item>) and Atom (<entry>) feeds, including Atom links stored
   // as href attributes. Substack normally serves RSS, but this avoids an empty
   // archive if its feed format changes.
