@@ -6,7 +6,7 @@ import { getNewsletterPosts } from "../lib/substack.js";
 let posts = [];
 let feedAvailable = true;
 try {
-  posts = await getNewsletterPosts();
+  posts = await getNewsletterPosts(Astro.locals.runtime?.env);
 } catch {
   feedAvailable = false;
 }

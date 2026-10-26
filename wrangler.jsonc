@@ -1,22 +1,32 @@
 {
-	"$schema": "./node_modules/wrangler/config-schema.json",
-	"compatibility_date": "2026-09-25",
-	"compatibility_flags": ["global_fetch_strictly_public"],
-	"name": "drewscast",
-	"main": "@astrojs/cloudflare/entrypoints/server",
-	"assets": {
-		"directory": "./dist",
-		"binding": "ASSETS"
-	},
-	"observability": {
-		"enabled": true
-	},
-	"previews": {
-		"kv_namespaces": [
-			{
-				"binding": "SESSION",
-				"id": "b000ba400b434b18a723362a8e7b7cda"
-			}
-		]
-	}
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "compatibility_date": "2026-09-25",
+  "compatibility_flags": ["global_fetch_strictly_public"],
+  "name": "drewscast",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "kv_namespaces": [
+    {
+      "binding": "DREWSLETTER_CACHE",
+      "id": "e5d57dc06d424cf0bbbd9ed1e235223c"
+    }
+  ],
+  "previews": {
+    "kv_namespaces": [
+      {
+        "binding": "SESSION",
+        "id": "b000ba400b434b18a723362a8e7b7cda"
+      },
+      {
+        "binding": "DREWSLETTER_CACHE",
+        "id": "3b4b9809750746659c73696d5a7d9b49"
+      }
+    ]
+  }
 }
