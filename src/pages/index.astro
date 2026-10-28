@@ -262,6 +262,57 @@ const latestEpisode = items.length
         color: var(--text);
       }
 
+      .breadthly-card {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 28px;
+        align-items: center;
+        padding: clamp(28px, 5vw, 52px);
+        border: 1px solid #24364b;
+        border-radius: 20px;
+        background: #101d2d;
+        color: #fff;
+      }
+
+      .breadthly-eyebrow {
+        margin: 0 0 16px;
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .breadthly-title {
+        max-width: 680px;
+        margin: 0;
+        font-size: clamp(2rem, 4vw, 3.25rem);
+        line-height: 1.02;
+        letter-spacing: -0.06em;
+      }
+
+      .breadthly-copy {
+        max-width: 680px;
+        margin: 18px 0 0;
+        color: #d1d8e0;
+        font-size: 1.05rem;
+        line-height: 1.6;
+      }
+
+      .breadthly-credit {
+        margin: 18px 0 0;
+        color: #aebccc;
+        font-size: 0.8rem;
+        font-weight: 650;
+      }
+
+      .breadthly-button {
+        white-space: nowrap;
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #111;
+      }
+
       .topics {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -303,6 +354,16 @@ const latestEpisode = items.length
         .latest,
         .topics {
           grid-template-columns: 1fr;
+        }
+
+        .breadthly-card {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+
+        .breadthly-button {
+          justify-self: start;
+          white-space: normal;
         }
 
         .player {
@@ -469,6 +530,33 @@ const latestEpisode = items.length
             </article>
           </div>
           <p class="description" style="margin-top: 24px;">Looking for something specific? <a href="/episodes" style="font-weight: 800; text-decoration: underline;">Browse all episodes →</a></p>
+        </div>
+      </section>
+
+      <section aria-labelledby="breadthly-heading">
+        <div class="container">
+          <div class="breadthly-card">
+            <div>
+              <p class="breadthly-eyebrow">Market intelligence</p>
+              <h2 class="breadthly-title" id="breadthly-heading">
+                Understand what’s happening beneath the market.
+              </h2>
+              <p class="breadthly-copy">
+                Drewscast uses market-breadth analysis to look beyond the major
+                indexes. Breadthly brings market participation and breadth
+                indicators together to help make sense of the bigger picture.
+              </p>
+              <p class="breadthly-credit">Market intelligence powered by Breadthly</p>
+            </div>
+            <a
+              class="button breadthly-button"
+              href="https://www.breadthly.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Explore Breadthly <span aria-hidden="true">&nbsp;↗</span>
+            </a>
+          </div>
         </div>
       </section>
 
