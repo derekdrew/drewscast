@@ -371,6 +371,42 @@ const latestEpisode = items.length
         }
       }
 
+      .newsletter {
+        width: 100%;
+        background: var(--text);
+        color: white;
+      }
+
+      .newsletter-inner {
+        display: grid;
+        grid-template-columns: 1.4fr 0.6fr;
+        gap: 40px;
+        align-items: center;
+      }
+
+      .newsletter .section-heading {
+        color: white;
+        margin-bottom: 20px;
+      }
+
+      .newsletter-copy {
+        max-width: 650px;
+        color: #c8c8c8;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      .newsletter-action {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .newsletter .button {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--text);
+      }
+
       @media (max-width: 520px) {
         .container {
           width: calc(100% - 28px);
@@ -388,57 +424,15 @@ const latestEpisode = items.length
           padding: 26px;
         }
 
-        .newsletter {
-          background: var(--text);
-          color: white;
-        }
-
         .newsletter-inner {
-          display: grid;
-          grid-template-columns: 1.4fr 0.6fr;
-          gap: 40px;
-          align-items: center;
-        }
-
-        .newsletter .section-heading {
-          color: white;
-          margin-bottom: 20px;
-        }
-
-        .eyebrow {
-          margin-bottom: 18px;
-          font-size: 0.8rem;
-          font-weight: 800;
-          letter-spacing: 0.12em;
-        }
-
-        .newsletter-copy {
-          max-width: 650px;
-          color: #c8c8c8;
-          font-size: 1.1rem;
-          line-height: 1.6;
+          grid-template-columns: 1fr;
+          gap: 28px;
         }
 
         .newsletter-action {
-          display: flex;
-          justify-content: flex-end;
+          justify-content: flex-start;
         }
-
-        .newsletter .button {
-          background: var(--accent);
-          border-color: var(--accent);
-          color: var(--text);
-        }
-
-        @media (max-width: 700px) {
-          .newsletter-inner {
-            grid-template-columns: 1fr;
-          }
-
-          .newsletter-action {
-            justify-content: flex-start;
-          }
-        }
+      }
 
     </style>
   </head>
