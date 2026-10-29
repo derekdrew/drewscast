@@ -371,12 +371,6 @@ const latestEpisode = items.length
         }
       }
 
-      .newsletter {
-        width: 100%;
-        background: var(--text);
-        color: white;
-      }
-
       .newsletter-inner {
         display: grid;
         grid-template-columns: 1.4fr 0.6fr;
@@ -385,13 +379,12 @@ const latestEpisode = items.length
       }
 
       .newsletter .section-heading {
-        color: white;
         margin-bottom: 20px;
       }
 
       .newsletter-copy {
         max-width: 650px;
-        color: #c8c8c8;
+        color: #444;
         font-size: 1.1rem;
         line-height: 1.6;
       }
@@ -399,12 +392,6 @@ const latestEpisode = items.length
       .newsletter-action {
         display: flex;
         justify-content: flex-end;
-      }
-
-      .newsletter .button {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: var(--text);
       }
 
       @media (max-width: 520px) {
@@ -431,6 +418,29 @@ const latestEpisode = items.length
 
         .newsletter-action {
           justify-content: flex-start;
+        }
+      }
+
+      @media (max-width: 520px) and (orientation: portrait) {
+        .newsletter {
+          width: 100vw;
+          margin-left: calc(50% - 50vw);
+          background: var(--text);
+          color: white;
+        }
+
+        .newsletter .section-heading {
+          color: white;
+        }
+
+        .newsletter-copy {
+          color: #c8c8c8;
+        }
+
+        .newsletter .button {
+          background: var(--accent);
+          border-color: var(--accent);
+          color: var(--text);
         }
       }
 
