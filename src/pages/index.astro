@@ -149,6 +149,68 @@ const latestEpisode = items.length
         border-bottom: 1px solid var(--line);
       }
 
+      .milestone {
+        padding: 0;
+        border-bottom: 1px solid var(--line);
+        background: #080808;
+        color: #fff;
+      }
+
+      .milestone-inner {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 32px;
+        align-items: center;
+        padding-top: 34px;
+        padding-bottom: 34px;
+      }
+
+      .milestone-kicker {
+        margin: 0 0 8px;
+        color: #e8b51e;
+        font-size: .72rem;
+        font-weight: 850;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+      }
+
+      .milestone-title {
+        margin: 0;
+        font-size: clamp(1.8rem, 4vw, 3rem);
+        line-height: 1;
+        letter-spacing: -.055em;
+      }
+
+      .milestone-title strong {
+        color: #e8b51e;
+      }
+
+      .milestone-copy {
+        max-width: 650px;
+        margin: 12px 0 0;
+        color: #d0d0d0;
+        font-size: .98rem;
+        line-height: 1.55;
+      }
+
+      .milestone-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 13px 19px;
+        border: 1px solid #e8b51e;
+        border-radius: 999px;
+        color: #080808;
+        background: #e8b51e;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .milestone-link:hover {
+        background: #f4ca4f;
+        border-color: #f4ca4f;
+      }
+
       .eyebrow {
         margin-bottom: 20px;
         font-size: 0.75rem;
@@ -473,6 +535,20 @@ const latestEpisode = items.length
             <a class="button" href="#latest">Listen to the latest</a>
             <a class="button secondary" href="#about">About Drewscast</a>
           </div>
+        </div>
+      </section>
+
+      <section class="milestone" aria-labelledby="milestone-title">
+        <div class="container milestone-inner">
+          <div>
+            <p class="milestone-kicker">A Drewscast milestone</p>
+            <h2 class="milestone-title" id="milestone-title"><strong>50 episodes.</strong> And we’re just getting started.</h2>
+            <p class="milestone-copy">
+              Thanks to everyone who has listened, read, subscribed, or shared an episode.
+              The goal remains the same: what’s happening, why it matters, and what everyone else is missing.
+            </p>
+          </div>
+          <a class="milestone-link" href="/episodes">Explore the episodes <span aria-hidden="true">&nbsp;→</span></a>
         </div>
       </section>
 
